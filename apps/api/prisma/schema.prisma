@@ -1,0 +1,72 @@
+// Mirrors implementation-spec-v1.md §5 exactly. `packages.package` is the versioned
+// EvidencePackage read-model (JSONB) — never mutated in place; reprocessing writes a new version.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Claim {
+  id        String   @id
+  claimant  String
+  employer  String
+  type      String
+  leaveType String?  @map("leave_type")
+  status    String
+  assignee  String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  documents      Document[]
+  packages       Package[]
+  statusHistory  ClaimStatusHistory[]
+
+  @@index([status, updatedAt], map: "ix_claims_status")
+  @@map("claims")
+}
+
+model Document {
+  id         String   @id
+  claimId    String   @map("claim_id")
+  type       String
+  storageKey String   @map("storage_key")
+  pages      Int?
+  receivedAt DateTime @map("received_at") @db.Date
+
+  claim Claim @relation(fields: [claimId], references: [id])
+
+  @@map("documents")
+}
+
+model Package {
+  id          BigInt   @id @default(autoincrement())
+  claimId     String   @map("claim_id")
+  version     Int
+  runId       String   @map("run_id")
+  generatedAt DateTime @default(now()) @map("generated_at")
+  package     Json
+
+  claim Claim @relation(fields: [claimId], references: [id])
+
+  @@unique([claimId, version])
+  @@map("packages")
+}
+
+model ClaimStatusHistory {
+  id             BigInt   @id @default(autoincrement())
+  claimId        String   @map("claim_id")
+  actor          String
+  fromStatus     String?  @map("from_status")
+  toStatus       String   @map("to_status")
+  packageVersion Int?     @map("package_version")
+  at             DateTime @default(now())
+
+  claim Claim @relation(fields: [claimId], references: [id])
+
+  @@map("claim_status_history")
+}

@@ -1,0 +1,34 @@
+name: contracts-drift
+
+on:
+  pull_request:
+    paths:
+      - "packages/contracts/**"
+      - "services/processor/contracts.py"
+  push:
+    branches: [main]
+    paths:
+      - "packages/contracts/**"
+      - "services/processor/contracts.py"
+
+jobs:
+  check-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install processor deps (for datamodel-codegen)
+        working-directory: services/processor
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install -r requirements.txt
+      - name: Install contracts deps (for json2ts)
+        working-directory: packages/contracts
+        run: npm install
+      - name: Check drift
+        run: bash packages/contracts/scripts/check-drift.sh

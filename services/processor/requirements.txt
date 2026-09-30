@@ -1,0 +1,31 @@
+# existing (milestone 1)
+pdf2image
+pytesseract
+pydantic>=2
+
+# contracts (milestone 5) — generated pydantic models (Exception, EvidencePackage)
+-e ../../packages/contracts
+
+# rules / assemble / api (milestones 2, 4)
+fastapi
+uvicorn[standard]
+jsonschema
+
+# LLM validate (milestone 3)
+httpx
+presidio-analyzer
+presidio-anonymizer
+# presidio-analyzer's default NLP engine needs spaCy's en_core_web_lg (~400MB) — it
+# auto-downloads on first use if missing; to fetch it ahead of time instead:
+#   python -m spacy download en_core_web_lg
+
+# S3 presigned reads (§7.1); also the Bedrock client when LLM_PROVIDER=bedrock (validate/llm_client.py)
+boto3
+
+# tests
+pytest
+pytest-asyncio
+moto[s3]
+
+# regenerating seed/sample-wh380e.pdf only (not used at runtime)
+reportlab

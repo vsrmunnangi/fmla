@@ -1,0 +1,24 @@
+{
+  "claimId": "FMLA-25-102938",
+  "documents": [
+    {
+      "docId": "DOC-001",
+      "type": "WH-380-E",
+      "storageKey": "../../seed/sample-wh380e.pdf"
+    }
+  ],
+  "claim": {
+    "claimant": "Jordan Rivera",
+    "employer": "Acme Corp",
+    "type": "FMLA",
+    "receivedAt": "2025-09-01",
+    "leaveYear": {
+      "start": "2025-01-01",
+      "end": "2025-12-31"
+    },
+    "fmlaBalance": {
+      "usedWeeks": 2,
+      "totalWeeks": 12
+    }
+  }
+}

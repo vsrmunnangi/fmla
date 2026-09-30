@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fmla-evidence-package/schema/evidence-package.schema.json",
+  "title": "EvidencePackage",
+  "description": "The read-model the React UI renders. Assembled by services/processor, persisted verbatim as packages.package (JSONB) by the api. Never mutated in place — reprocessing writes a new version.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "claimId": { "type": "string" },
+    "runId": { "type": "string" },
+    "packageVersion": { "type": "integer", "minimum": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "status": { "type": "string", "const": "AWAITING_REVIEW" },
+    "claim": { "$ref": "#/$defs/ClaimSummary" },
+    "metrics": { "$ref": "#/$defs/Metrics" },
+    "documents": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/DocumentSummary" }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "evidence-field.schema.json" }
+    },
+    "functionalChecks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/FunctionalCheck" }
+    },
+    "exceptions": {
+      "type": "array",
+      "items": { "$ref": "exception.schema.json" }
+    },
+    "provenance": { "$ref": "#/$defs/Provenance" }
+  },
+  "required": [
+    "claimId", "runId", "packageVersion", "generatedAt", "status",
+    "claim", "metrics", "documents", "evidence", "functionalChecks",
+    "exceptions", "provenance"
+  ],
+  "$defs": {
+    "LeaveYear": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "start": { "type": "string", "format": "date" },
+        "end": { "type": "string", "format": "date" }
+      },
+      "required": ["start", "end"]
+    },
+    "FmlaBalance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "usedWeeks": { "type": "number", "minimum": 0 },
+        "totalWeeks": { "type": "number", "minimum": 0 }
+      },
+      "required": ["usedWeeks", "totalWeeks"]
+    },
+    "ClaimSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "claimant": { "type": "string" },
+        "employer": { "type": "string" },
+        "type": { "type": "string" },
+        "receivedAt": { "type": "string", "format": "date" },
+        "leaveYear": { "$ref": "#/$defs/LeaveYear" },
+        "fmlaBalance": { "$ref": "#/$defs/FmlaBalance" }
+      },
+      "required": ["claimant", "employer", "type", "receivedAt", "leaveYear", "fmlaBalance"]
+    },
+    "Metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "documents": { "type": "integer", "minimum": 0 },
+        "fieldsExpected": { "type": "integer", "minimum": 0 },
+        "fieldsCaptured": { "type": "integer", "minimum": 0 },
+        "completenessPass": { "type": "integer", "minimum": 0 },
+        "completenessMissing": { "type": "integer", "minimum": 0 },
+        "conflicts": { "type": "integer", "minimum": 0 },
+        "overallConfidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "required": [
+        "documents", "fieldsExpected", "fieldsCaptured",
+        "completenessPass", "completenessMissing", "conflicts", "overallConfidence"
+      ]
+    },
+    "DocumentSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "docId": { "type": "string" },
+        "type": { "type": "string" },
+        "pages": { "type": "integer", "minimum": 1 },
+        "receivedAt": { "type": "string", "format": "date" },
+        "status": { "type": "string" }
+      },
+      "required": ["docId", "type", "pages", "receivedAt", "status"]
+    },
+    "FunctionalCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "function": { "type": "string" },
+        "providerStatement": { "type": ["string", "null"] },
+        "effectivePeriod": { "type": ["string", "null"] },
+        "source": {
+          "anyOf": [
+            { "$ref": "evidence-field.schema.json#/$defs/Source" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "required": ["function", "providerStatement", "effectivePeriod", "source"]
+    },
+    "ModelStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "model": { "type": "string" },
+        "promptVersion": { "type": "string" }
+      },
+      "required": ["name", "model", "promptVersion"]
+    },
+    "Provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runId": { "type": "string" },
+        "pipelineVersion": { "type": "string" },
+        "modelSteps": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ModelStep" }
+        },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["runId", "pipelineVersion", "modelSteps", "startedAt", "completedAt"]
+    }
+  }
+}

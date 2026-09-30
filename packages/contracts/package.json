@@ -1,0 +1,13 @@
+{
+  "name": "@fmla/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JSON Schema shapes for EvidenceField, Exception, EvidencePackage — generated to TypeScript here, and to pydantic for services/processor. CI fails on drift (see scripts/check-drift.sh).",
+  "scripts": {
+    "generate": "json2ts -i schema/evidence-field.schema.json -o generated/ts/evidence-field.d.ts --cwd schema --unreachableDefinitions && json2ts -i schema/exception.schema.json -o generated/ts/exception.d.ts --cwd schema --unreachableDefinitions && json2ts -i schema/evidence-package.schema.json -o generated/ts/evidence-package.d.ts --cwd schema --unreachableDefinitions",
+    "check-drift": "bash scripts/check-drift.sh"
+  },
+  "devDependencies": {
+    "json-schema-to-typescript": "^15.0.4"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fmla-evidence-package/schema/exception.schema.json",
+  "title": "Exception",
+  "description": "The gap list. `missing` is produced by the deterministic rules engine; `unclear`/`conflict` by the LLM validator; `low_confidence` by OCR confidence thresholding. `cure` stays null in v1 — no cure drafting.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "exceptionId": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": ["missing", "unclear", "conflict", "low_confidence"]
+    },
+    "title": { "type": "string" },
+    "detail": { "type": "string" },
+    "evidenceRefs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/SourceRef" },
+      "minItems": 1
+    },
+    "cure": { "type": "null", "default": null }
+  },
+  "required": ["exceptionId", "type", "title", "detail", "evidenceRefs", "sources"],
+  "$defs": {
+    "SourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "docId": { "type": "string" },
+        "page": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["docId", "page"]
+    }
+  }
+}

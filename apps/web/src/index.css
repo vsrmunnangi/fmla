@@ -1,0 +1,4 @@
+/* Small global rules that inline styles can't express (hover states). */
+tbody tr[data-clickable]:hover {
+  background: #f0fdfa;
+}

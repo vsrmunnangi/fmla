@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fmla-contracts"
+version = "0.1.0"
+description = "Generated pydantic models for the FMLA evidence-package contracts (source of truth: packages/contracts/schema/*.json). EvidenceField/Source stay hand-written in services/processor/contracts.py — not duplicated here."
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2"]
+
+[tool.setuptools]
+package-dir = { "fmla_contracts" = "generated/python" }
+packages = ["fmla_contracts"]

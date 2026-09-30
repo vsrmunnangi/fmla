@@ -1,0 +1,219 @@
+{
+    "claimId": "FMLA-25-102938",
+    "runId": "RUN-4fbd873855fddba8",
+    "packageVersion": 1,
+    "generatedAt": "2026-09-09T18:41:18.006780Z",
+    "status": "AWAITING_REVIEW",
+    "claim": {
+        "claimant": "Jordan Rivera",
+        "employer": "Acme Corp",
+        "type": "FMLA",
+        "receivedAt": "2025-09-01",
+        "leaveYear": {
+            "start": "2025-01-01",
+            "end": "2025-12-31"
+        },
+        "fmlaBalance": {
+            "usedWeeks": 2.0,
+            "totalWeeks": 12.0
+        }
+    },
+    "metrics": {
+        "documents": 1,
+        "fieldsExpected": 6,
+        "fieldsCaptured": 3,
+        "completenessPass": 3,
+        "completenessMissing": 3,
+        "conflicts": 0,
+        "overallConfidence": 0.958
+    },
+    "documents": [
+        {
+            "docId": "DOC-001",
+            "type": "WH-380-E",
+            "pages": 1,
+            "receivedAt": "2026-09-09",
+            "status": "received"
+        }
+    ],
+    "evidence": [
+        {
+            "fieldId": "provider.name",
+            "group": "provider",
+            "label": "Provider name",
+            "value": null,
+            "confidence": 0.0,
+            "status": "missing",
+            "source": null
+        },
+        {
+            "fieldId": "condition.onset",
+            "group": "condition",
+            "label": "Condition onset (approx.)",
+            "value": "March 15, 2025",
+            "confidence": 0.96,
+            "status": "ok",
+            "source": {
+                "docId": "DOC-001",
+                "page": 1,
+                "bbox": [
+                    0.4794,
+                    0.2414,
+                    0.1341,
+                    0.0132
+                ]
+            }
+        },
+        {
+            "fieldId": "leave.type",
+            "group": "leave",
+            "label": "Leave type",
+            "value": "Intermittent",
+            "confidence": 0.96,
+            "status": "ok",
+            "source": {
+                "docId": "DOC-001",
+                "page": 1,
+                "bbox": [
+                    0.2259,
+                    0.3018,
+                    0.0965,
+                    0.0114
+                ]
+            }
+        },
+        {
+            "fieldId": "leave.frequency",
+            "group": "leave",
+            "label": "Frequency",
+            "value": "episodes month, day each 2 1",
+            "confidence": 0.955,
+            "status": "ok",
+            "source": {
+                "docId": "DOC-001",
+                "page": 1,
+                "bbox": [
+                    0.2218,
+                    0.3627,
+                    0.2929,
+                    0.0141
+                ]
+            }
+        },
+        {
+            "fieldId": "condition.nextTreatmentDate",
+            "group": "condition",
+            "label": "Next treatment date",
+            "value": null,
+            "confidence": 0.0,
+            "status": "missing",
+            "source": null
+        }
+    ],
+    "functionalChecks": [
+        {
+            "function": "Intermittent",
+            "providerStatement": null,
+            "effectivePeriod": "March 15, 2025",
+            "source": {
+                "docId": "DOC-001",
+                "page": 1,
+                "bbox": [
+                    0.2259,
+                    0.3018,
+                    0.0965,
+                    0.0114
+                ]
+            }
+        }
+    ],
+    "exceptions": [
+        {
+            "exceptionId": "EXC-missing-DOC-001-0",
+            "type": "missing",
+            "title": "Name",
+            "detail": "Required field 'provider.name' was not found in DOC-001 (WH-380-E).",
+            "evidenceRefs": [
+                "provider.name"
+            ],
+            "sources": [
+                {
+                    "docId": "DOC-001",
+                    "page": 1
+                }
+            ],
+            "cure": null
+        },
+        {
+            "exceptionId": "EXC-missing-DOC-001-2",
+            "type": "missing",
+            "title": "Pathway",
+            "detail": "Required field 'condition.pathway' was not found in DOC-001 (WH-380-E).",
+            "evidenceRefs": [
+                "condition.pathway"
+            ],
+            "sources": [
+                {
+                    "docId": "DOC-001",
+                    "page": 1
+                }
+            ],
+            "cure": null
+        },
+        {
+            "exceptionId": "EXC-missing-DOC-001-5",
+            "type": "missing",
+            "title": "Next treatment date",
+            "detail": "Required field 'condition.nextTreatmentDate' was not found in DOC-001 (WH-380-E).",
+            "evidenceRefs": [
+                "condition.nextTreatmentDate"
+            ],
+            "sources": [
+                {
+                    "docId": "DOC-001",
+                    "page": 1
+                }
+            ],
+            "cure": null
+        },
+        {
+            "exceptionId": "EXC-unclear-0",
+            "type": "unclear",
+            "title": "Vague leave frequency",
+            "detail": "The value 'episodes month, day each 2 1' does not provide a clear measurable rate",
+            "evidenceRefs": [
+                "leave.frequency"
+            ],
+            "sources": [
+                {
+                    "docId": "DOC-001",
+                    "page": 1
+                }
+            ],
+            "cure": null
+        }
+    ],
+    "provenance": {
+        "runId": "RUN-4fbd873855fddba8",
+        "pipelineVersion": "v1",
+        "modelSteps": [
+            {
+                "name": "extract",
+                "model": "tesseract+crude-anchor-match",
+                "promptVersion": "n/a"
+            },
+            {
+                "name": "rules",
+                "model": "deterministic-checklist",
+                "promptVersion": "n/a"
+            },
+            {
+                "name": "validate",
+                "model": "mistral",
+                "promptVersion": "v1"
+            }
+        ],
+        "startedAt": "2026-09-09T18:41:14.659951Z",
+        "completedAt": "2026-09-09T18:41:18.006780Z"
+    }
+}

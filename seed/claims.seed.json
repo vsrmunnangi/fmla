@@ -1,0 +1,20 @@
+[
+  {
+    "id": "FMLA-25-102938",
+    "claimant": "Jordan Rivera",
+    "employer": "Acme Corp",
+    "type": "FMLA",
+    "leaveType": "Intermittent",
+    "status": "AWAITING_REVIEW",
+    "assignee": null
+  },
+  {
+    "id": "FMLA-25-102941",
+    "claimant": "Casey Nguyen",
+    "employer": "Northwind Logistics",
+    "type": "FMLA",
+    "leaveType": "Continuous",
+    "status": "UPLOADED",
+    "assignee": null
+  }
+]

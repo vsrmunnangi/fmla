@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fmla-evidence-package/schema/evidence-field.schema.json",
+  "title": "EvidenceField",
+  "description": "Mirrors services/processor/contracts.py exactly — that file is the source of truth (hand-written, frozen); this schema exists so api/web get generated TS types and so drift is caught in CI.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "fieldId": { "type": "string" },
+    "group": { "type": "string" },
+    "label": { "type": "string" },
+    "value": { "type": ["string", "null"], "default": null },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.0 },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "unclear", "low_confidence", "missing"],
+      "default": "ok"
+    },
+    "source": {
+      "anyOf": [{ "$ref": "#/$defs/Source" }, { "type": "null" }],
+      "default": null
+    }
+  },
+  "required": ["fieldId", "group", "label"],
+  "$defs": {
+    "Source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "docId": { "type": "string" },
+        "page": { "type": "integer", "minimum": 1 },
+        "bbox": {
+          "anyOf": [
+            { "type": "array", "items": { "type": "number" }, "minItems": 4, "maxItems": 4 },
+            { "type": "null" }
+          ],
+          "default": null
+        }
+      },
+      "required": ["docId", "page"]
+    }
+  },
+  "allOf": [
+    {
+      "comment": "Invariant: a present, provider-derived value (status != missing) must carry a source.",
+      "if": {
+        "properties": {
+          "value": { "type": "string" },
+          "status": { "not": { "const": "missing" } }
+        },
+        "required": ["value", "status"]
+      },
+      "then": {
+        "properties": { "source": { "$ref": "#/$defs/Source" } },
+        "required": ["source"]
+      }
+    }
+  ]
+}
